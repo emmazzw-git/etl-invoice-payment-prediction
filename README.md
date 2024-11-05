@@ -39,6 +39,7 @@ make log
 # Any more to do?
 * add lint
 * add mypy type check
+* add bandit code security test
 * add Spark UI for performance analysis
 * add error handling such as exception catching
 * add unit test coverage and improve unit test coverage
