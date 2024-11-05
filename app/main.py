@@ -50,8 +50,8 @@ class InvoicePredictionEtlJob(LoggingService):
       self.logger.info(invoice_line_items_df_raw.show(2))
       self.logger.info(invoices_df_raw.show(2))
       self.logger.info(skus_df_raw.show(2))
- 
 
+ 
 if __name__ == "__main__":
   args = sys.argv
   print(f'args are {args}')
