@@ -64,6 +64,7 @@ class InvoicePredictionEtlJob(LoggingService):
       output_path = "/opt/spark-app/output/feature.csv"
       writer = FeatureWriter(invoice_prediction_df, output_path)
       writer.write_feature_to_dest()
+      self.logger.info("CSV file written to the destination folder")
 
 
 if __name__ == "__main__":
