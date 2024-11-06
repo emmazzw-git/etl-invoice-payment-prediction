@@ -1,9 +1,7 @@
 import ast
-import re
 import logging
 from dataclasses import dataclass
 from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.types import StructType
 from typing import Tuple
 from reader.schema import accounts_schema, invoice_line_items_schema, invoices_schema, skus_schema
 
@@ -27,7 +25,7 @@ class CsvReader:
             self.spark.read.option("delimiter", ",")
             .option("header", True)
             .option("lineSep", source_file_lineSep)
-            .option("badRecordsPath", "/bad_records/source_file_schema.json") # refactor the bad records file path with more customised names
+            .option("badRecordsPath", "/opt/spark-app/bad_records/source_file_schema.json") # refactor the bad records file path with more customised names
             .schema(source_file_schema)
             .csv(
                 path=fpath,

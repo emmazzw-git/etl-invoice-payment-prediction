@@ -3,6 +3,8 @@ from pyspark.sql import SparkSession
 from dataclasses import dataclass
 from lib.logger.logging_service import LoggingService
 from reader.csv_reader import CsvReader
+from transformer.profit_calculator import ProfitCalculator
+from writer.feature_writer import FeatureWriter
 
 
 @dataclass
@@ -40,18 +42,30 @@ class InvoicePredictionEtlJob(LoggingService):
       ##########################################################
       accounts_df_raw, invoice_line_items_df_raw, invoices_df_raw, skus_df_raw = reader.load_raw_file_with_schema()
       self.logger.info("Raw file loaded with schema")
+      #########################################################
 
       ## TODO Process the bad records either save in tables or retry
 
-      #########################################################
-      ## 4. Load source files with schemas
-      ##########################################################
-      self.logger.info(accounts_df_raw.show(3))
-      self.logger.info(invoice_line_items_df_raw.show(2))
-      self.logger.info(invoices_df_raw.show(2))
-      self.logger.info(skus_df_raw.show(2))
+      ##########################################################################
+      ## 4. Calculate profit for each Account on each Invoice Month
+      ##########################################################################
+      transformer = ProfitCalculator(
+         self.logger,
+         accounts_df_raw,
+         invoice_line_items_df_raw,
+         invoices_df_raw,
+         skus_df_raw
+      )
+      invoice_prediction_df = transformer.calculate_profit()
+      self.logger.info("Raw data transformed to features")
+      ##########################################################################
+      ## 5. Write the Table with features to path
+      ##########################################################################
+      output_path = "/opt/spark-app/output/feature.csv"
+      writer = FeatureWriter(invoice_prediction_df, output_path)
+      writer.write_feature_to_dest()
 
- 
+
 if __name__ == "__main__":
   args = sys.argv
   print(f'args are {args}')

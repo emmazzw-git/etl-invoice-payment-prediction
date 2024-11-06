@@ -36,9 +36,16 @@ make test
 make log
 ```
 
-# Any more to do?
+## Output
+After a successful run of the etl job app, an folder named "output" will be generated at the folder path "app/output" with the feature data in a CSV file
+
+## Unit Test
+Currently, the unit test is only testing transformer logics. Can add more to test out logics in CsvReader as well.
+
+## Any more to do?
 * add lint
 * add mypy type check
+* add more unit test
 * add bandit code security test
 * add Spark UI for performance analysis
 * add error handling such as exception catching
